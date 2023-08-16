@@ -1,0 +1,25 @@
+#This is the jobs to be executed when a Pull Request is merged or a push to master happens
+name: Merge Main
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  ORG_TOKEN: ${{ secrets.SVC_AWS_TRADING_DEV_CI_GPR_READ_ACCESS }}
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compile and run tests
+        run: sbt clean test
